@@ -2,7 +2,12 @@
 defaults:
   - pipeline: pipeline_v1
   - dataset: dataset
+  - logger: mlflow_logger
   - _self_
 
 
 input_path: /home/victore/PycharmProjects/mafat_2022_data
+
+experiment_name: check_v1
+
+tracking_uri: file:///home/victore/PycharmProjects/mafat_mlflow

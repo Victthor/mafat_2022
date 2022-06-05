@@ -11,4 +11,5 @@ hydra-core==1.2.0
 optuna==2.10.0
 hydra-optuna-sweeper==1.2.0
 mlflow==1.26.1
+mlflow_extend
 plotly==5.8.0
