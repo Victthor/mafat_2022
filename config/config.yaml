@@ -8,6 +8,6 @@ defaults:
 
 input_path: /home/victore/PycharmProjects/mafat_2022_data
 
-experiment_name: check_v1
+experiment_name: multi_check_v1_
 
 tracking_uri: file:///home/victore/PycharmProjects/mafat_mlflow

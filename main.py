@@ -23,8 +23,8 @@ def optimization_target(cfg: DictConfig):
         logger.log_config(cfg, 'config.yaml')
         logger.log_overrides()
 
-        min_length = 360
-        offset = 360
+        min_length = 180
+        offset = 90
         splitted_data = [df for df in dataset if df.shape[0] >= min_length]
 
         intervals = []
@@ -40,7 +40,7 @@ def optimization_target(cfg: DictConfig):
                 cur_end = cur_start + min_length
 
         X_train = [interval[['RSSI_Left', 'RSSI_Right']].to_numpy().transpose() for interval in intervals]
-        X_train = [vec - np.mean(vec, axis=0, keepdims=True) for vec in X_train]
+        # X_train = [vec - np.mean(vec, axis=0, keepdims=True) for vec in X_train]
         # X_train = np.array(X_train)
         y_train = np.array([int(interval[['Num_People']].iloc[0]) for interval in intervals])
         y_train[y_train > 0] = 1
