@@ -16,7 +16,7 @@ def optimization_target(cfg: DictConfig):
     dataset = instantiate(cfg.dataset, _recursive_=False)
 
     min_length = 360
-    offset = 180
+    offset = 90
     splitted_data = [df for df in dataset if df.shape[0] >= min_length]
 
     intervals = []
@@ -34,6 +34,7 @@ def optimization_target(cfg: DictConfig):
     X_train = [interval[['RSSI_Left', 'RSSI_Right']] for interval in intervals]
     y_train = np.array([int(interval[['Num_People']].iloc[0]) for interval in intervals])
     y_train[y_train > 0] = 1
+    # y_train[y_train == 0] = -1
     # devices = np.array([int(interval[['Device_ID']].iloc[0]) for interval in intervals])
     rooms = np.array([int(interval[['Room_Num']].iloc[0]) for interval in intervals])
 
@@ -47,16 +48,19 @@ def optimization_target(cfg: DictConfig):
     auc_room = {}
     auc_room_test = {}
     for room in set(rooms):
-        print(f'fitting room: {room}')
 
         X_train_rooms = [df for df_inx, df in enumerate(X_train) if rooms[df_inx] != room]
         y_train_rooms = y_train[rooms != room]
-        pipeline.fit(X_train_rooms, y_train_rooms)
-        auc_room[room] = roc_auc_score(y_train_rooms, pipeline.decision_function(X_train_rooms), average=None)
 
         X_test_rooms = [df for df_inx, df in enumerate(X_train) if rooms[df_inx] == room]
         y_test_rooms = y_train[rooms == room]
-        auc_room_test[room] = roc_auc_score(y_test_rooms, pipeline.decision_function(X_test_rooms), average=None)
+
+        print(f'fitting room: {room}')
+        pipeline.fit(X_train_rooms, y_train_rooms)
+        auc_room[room] = roc_auc_score(y_train_rooms, pipeline.predict_proba(X_train_rooms)[:, 1], average=None)
+
+        print(f'testing room: {room}')
+        auc_room_test[room] = roc_auc_score(y_test_rooms, pipeline.predict_proba(X_test_rooms)[:, 1], average=None)
 
     # # auc per device
     # auc_device = {}
@@ -77,7 +81,7 @@ def optimization_target(cfg: DictConfig):
     print(f'mean auc per room test: {np.mean(auc_room_test_list)} std: {np.std(auc_room_test_list)}')
     # print(f'mean auc per device: {np.mean(auc_device_list)} std: {np.std(auc_device_list)}')
 
-    # return auc
+    return np.mean(auc_room_test_list), np.std(auc_room_test_list)
 
 
 if __name__ == '__main__':

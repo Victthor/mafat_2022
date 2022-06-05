@@ -11,13 +11,41 @@ steps_config:
 
   - standard_scaler:
       _target_: sklearn.preprocessing.StandardScaler
-      with_mean: False
+#      with_mean: False
+#      with_std: False
 
-  - ridge_classifier:
-      _target_: sklearn.linear_model.RidgeClassifier
-      alpha: 0.3
+  - logistic_regression:
+      _target_: sklearn.linear_model.SGDClassifier
+      loss: log
+      penalty: l2
+      # dual: False
+      alpha: 0.01  # the higher the value, the stronger the regularization
+      max_iter: 350
+      verbose: 1
+#      eta0: 0.0001
+      learning_rate: optimal
+      n_iter_no_change: 50
       # fit_intercept: True
       class_weight: balanced
       # solver: saga  # auto / saga
       random_state: 1
+
+#  - logistic_regression:
+#      _target_: sklearn.linear_model.LogisticRegression
+#      penalty: l2
+#      # dual: False
+#      C: 1.0  # smaller values specify stronger regularization
+#      max_iter: 100
+#      # fit_intercept: True
+#      class_weight: balanced
+#      # solver: saga  # auto / saga
+#      random_state: 1
+
+#  - ridge_classifier:
+#      _target_: sklearn.linear_model.RidgeClassifier
+#      alpha: 1.0
+#      # fit_intercept: True
+#      class_weight: balanced
+#      # solver: saga  # auto / saga
+#      random_state: 1
 #      normalize: True
