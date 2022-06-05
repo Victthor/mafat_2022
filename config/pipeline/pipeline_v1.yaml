@@ -1,0 +1,23 @@
+
+_target_: factories.pipeline_factory.pipeline_factory
+
+steps_config:
+  - minirocket:
+      _target_: sktime.transformations.panel.rocket.MiniRocketMultivariate
+      num_kernels: 10000
+      max_dilations_per_kernel: 32
+      n_jobs: 16
+      random_state: 1
+
+  - standard_scaler:
+      _target_: sklearn.preprocessing.StandardScaler
+      with_mean: False
+
+  - ridge_classifier:
+      _target_: sklearn.linear_model.RidgeClassifier
+      alpha: 0.3
+      # fit_intercept: True
+      class_weight: balanced
+      # solver: saga  # auto / saga
+      random_state: 1
+#      normalize: True

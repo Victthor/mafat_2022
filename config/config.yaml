@@ -1,0 +1,8 @@
+
+defaults:
+  - pipeline: pipeline_v1
+  - dataset: dataset
+  - _self_
+
+
+input_path: /home/victore/PycharmProjects/mafat_2022_data
