@@ -8,17 +8,39 @@ sweeper:
     seed: 123
   direction:
     - maximize
-    - minimize
 
   study_name: opti
   storage: null
   n_trials: 100
   n_jobs: 2
 
-  search_space:
-    pipeline.steps_config.2.logistic_regression.learning_rate:
-      type: float
-      low: 0.00001
-      high: 10.0
-      log: True
+#  params:
+#    pipeline.steps_config.2.logistic_regression.alpha: range(0.00001, 10.0, step=True)
+
+#  search_space:
+#    pipeline.steps_config.2.logistic_regression.alpha:
+#      type: float
+#      low: 0.00001
+#      high: 10.0
+#      log: True
+
+#  search_space:
+#    pipeline.steps_config.0.HistGradientBoostingClassifier.learning_rate:
+#      type: float
+#      low: 0.001
+#      high: 5.0
+#      log: True
+#
+#    pipeline.steps_config.0.HistGradientBoostingClassifier.l2_regularization:
+#      type: float
+#      low: 0.001
+#      high: 5.0
+#      log: True
+
+#  search_space:
+#    pipeline.final_estimator.1.LogisticRegression.alpha:
+#      type: float
+#      low: 0.001
+#      high: 5.0
+#      log: True
 

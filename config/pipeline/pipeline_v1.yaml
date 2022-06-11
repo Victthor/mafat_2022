@@ -2,11 +2,15 @@
 _target_: factories.pipeline_factory.pipeline_factory
 
 steps_config:
+  - TSTransformer:
+      _target_: transformers.ts_transformer.CustomTransformer
+      min_length: ${data_provider.params.min_length}
+
   - minirocket:
       _target_: sktime.transformations.panel.rocket.MiniRocketMultivariate
-      num_kernels: 10000
+#      num_kernels: 10000
       max_dilations_per_kernel: 32
-      n_jobs: 16
+#      n_jobs: 16
       random_state: 1
 
   - standard_scaler:
@@ -19,7 +23,7 @@ steps_config:
       loss: log
       penalty: l2
       # dual: False
-      alpha: 0.5  # the higher the value, the stronger the regularization
+      alpha: 0.222  # the higher the value, the stronger the regularization
       max_iter: 500
       verbose: 1
 #      eta0: 0.0001
