@@ -2,6 +2,6 @@
 _target_: data_provider.ts_provider_v1.Provider
 params:
   min_length: 360
-  offset: 180
+  offset: 90
   shuffle: True
   seed: 42

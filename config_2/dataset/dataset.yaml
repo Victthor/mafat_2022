@@ -1,0 +1,3 @@
+
+_target_: factories.dataset_factory.dataset_factory
+input_path: ${input_path}

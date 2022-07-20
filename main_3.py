@@ -5,9 +5,10 @@ from hydra.utils import instantiate
 from omegaconf import DictConfig
 import numpy as np
 from sklearn.metrics import roc_auc_score
+from sktime.transformations.panel.catch22 import Catch22
 
 
-@hydra.main(config_path=os.path.join('./config_2'), config_name='config')
+@hydra.main(config_path=os.path.join('./config_3'), config_name='config')
 def optimization_target(cfg: DictConfig):
     # print(cfg)
 
@@ -64,5 +65,6 @@ def optimization_target(cfg: DictConfig):
 
 
 if __name__ == '__main__':
+    Catch22(outlier_norm=False, replace_nans=True)
 
     optimization_target()

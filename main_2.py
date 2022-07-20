@@ -7,7 +7,7 @@ import numpy as np
 from sklearn.metrics import roc_auc_score
 
 
-@hydra.main(config_path=os.path.join('./config_2'), config_name='config')
+@hydra.main(config_path=os.path.join('./config'), config_name='config')
 def optimization_target(cfg: DictConfig):
     # print(cfg)
 

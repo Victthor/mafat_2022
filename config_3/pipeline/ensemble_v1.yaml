@@ -7,6 +7,7 @@ pipelines:
   - - TSTransformer:
         _target_: transformers.ts_transformer.CustomTransformer
         params:
+          min_length: ${data_provider.params.min_length}
           with_mean: null
           with_std: False
           feature_set:
@@ -58,6 +59,7 @@ pipelines:
   - - FeatureTransformer:
         _target_: transformers.feature_transformer.CustomTransformer
         params:
+          min_length: ${data_provider.params.min_length}
           with_mean: null
           with_std: True
 
@@ -81,13 +83,6 @@ final_estimator:
       _target_: sklearn.preprocessing.StandardScaler
       #      with_mean: False
       #      with_std: False
-
-  - nystroem:
-      _target_: sklearn.kernel_approximation.Nystroem
-      gamma: 0.2
-      random_state: 1
-      n_components: 300
-
   - LogisticRegression:
       _target_: sklearn.linear_model.LogisticRegressionCV
 #      _target_: sklearn.linear_model.SGDClassifier

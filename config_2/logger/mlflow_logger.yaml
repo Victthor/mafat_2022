@@ -1,0 +1,5 @@
+
+_target_: loggers.mlflow_logger.MLFlowLogger
+
+params:
+  tracking_uri: ${tracking_uri}

@@ -3,11 +3,16 @@ _target_: factories.pipeline_factory.pipeline_factory
 
 steps_config:
   - FeatureTransformer:
-      _target_: transformers.feature_transformer.CustomTransformer
+      _target_: transformers.catch_transformer.CustomTransformer
       params:
-          min_length: ${data_provider.params.min_length}
-          with_mean: null
-          with_std: True
+          with_mean: median
+          with_std: False
+          sel_feat: diff
+
+  - CatchTransformer:
+      _target_: sktime.transformations.panel.catch22.Catch22
+      outlier_norm: False
+      replace_nans: True
 
   - HistGradientBoostingClassifier:
       _target_: sklearn.ensemble.HistGradientBoostingClassifier

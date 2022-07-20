@@ -6,19 +6,34 @@ from sklearn.base import BaseEstimator, TransformerMixin
 
 class CustomTransformer(BaseEstimator, TransformerMixin):
 
-    # def __init__(self, min_length=360):
-    #     self.min_length = min_length
+    def __init__(self, params):
+        self.params = params
+        self.with_mean = params.get('with_mean', 'mean')
+        self.with_std = params.get('with_std', False)
 
     def fit(self, x, y=None):
         return self
 
     def transform(self, x, y=None):
-        x_train = [interval[['RSSI_Left', 'RSSI_Right']].to_numpy().transpose() for interval in x]
-        # x_train = [vec - np.median(vec, axis=1, keepdims=True) for vec in x_train]
 
-        diffs = [(data[0, :] - data[1, :]).astype(np.float32) for data in x_train]
+        if isinstance(x, list):
+            x_train = np.array(
+                [interval[['RSSI_Left', 'RSSI_Right']].to_numpy().astype(np.float32).transpose() for interval in x]
+            )
+        else:
+            x_train = x[['RSSI_Left', 'RSSI_Right']].to_numpy().astype(np.float32).transpose()
+        
+        if self.with_mean == 'mean':
+            x_train -= np.mean(x_train, axis=2, keepdims=True)
+        elif self.with_mean == 'median':
+            x_train -= np.median(x_train, axis=2, keepdims=True)
 
-        diffs_std = [np.std(diff) for diff in diffs]
+        if self.with_std:
+            x_train /= (np.std(x_train, axis=2, keepdims=True) + 1e-6)
+
+        diffs = x_train[:, 0, :] - x_train[:, 1, :]
+
+        diffs_std = np.std(diffs, axis=1)
 
         diffs_values, diffs_counts = [], []
         for diff in diffs:
@@ -28,17 +43,17 @@ class CustomTransformer(BaseEstimator, TransformerMixin):
         unique_diffs_std = [np.std(diff) for diff in diffs_values]
         len_counts = [diffs_count.size for diffs_count in diffs_counts]
 
-        self_diffs_left = [(data[0, 1:] - data[0, :-1]).astype(np.float32) for data in x_train]
-        self_diffs_right = [(data[1, 1:] - data[1, :-1]).astype(np.float32) for data in x_train]
-        diffs_diffs = [(data[1:] - data[:-1]).astype(np.float32) for data in diffs]
+        self_diffs_left = x_train[:, 0, 1:] - x_train[:, 0, :-1]
+        self_diffs_right = x_train[:, 1, 1:] - x_train[:, 1, :-1]
+        diffs_diffs = diffs[:, 1:] - diffs[:, :-1]
 
-        feat_1 = [np.sum(np.abs(data)) for data in diffs_diffs]
-        feat_1_l = [np.sum(np.abs(data)) for data in self_diffs_left]
-        feat_1_r = [np.sum(np.abs(data)) for data in self_diffs_right]
+        feat_1 = np.sum(np.abs(diffs_diffs), axis=1)
+        feat_1_l = np.sum(np.abs(self_diffs_left), axis=1)
+        feat_1_r = np.sum(np.abs(self_diffs_right), axis=1)
 
-        feat_2 = [data[data != 0].size for data in diffs_diffs]
-        feat_2_l = [data[data != 0].size for data in self_diffs_left]
-        feat_2_r = [data[data != 0].size for data in self_diffs_right]
+        feat_2 = np.sum(np.abs(diffs_diffs != 0), axis=1)
+        feat_2_l = np.sum(np.abs(self_diffs_left != 0), axis=1)
+        feat_2_r = np.sum(np.abs(self_diffs_right != 0), axis=1)
 
         inputs = np.stack(
             [

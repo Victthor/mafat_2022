@@ -1,0 +1,71 @@
+
+defaults:
+  - override sweeper: optuna
+  - override sweeper/sampler: tpe
+
+sweeper:
+  sampler:
+    seed: 123
+  direction:
+    - maximize
+
+  study_name: opti
+  storage: null
+  n_trials: 100
+  n_jobs: 2
+
+  search_space:
+    pipeline.steps_config.2.HistGradientBoostingClassifier.learning_rate:
+      type: float
+      low: 0.001
+      high: 4.0
+      log: True
+
+    pipeline.steps_config.2.HistGradientBoostingClassifier.l2_regularization:
+      type: float
+      low: 0.001
+      high: 4.0
+      log: True
+
+    pipeline.steps_config.0.FeatureTransformer.params.with_mean:
+      type: categorical
+      choices:
+        - null
+        - mean
+        - median
+
+#    pipeline.steps_config.0.FeatureTransformer.params.with_std:
+#      type: categorical
+#      choices:
+#        - True
+#        - False
+
+    pipeline.steps_config.0.FeatureTransformer.params.sel_feat:
+      type: categorical
+      choices:
+        - diff
+        - avg
+#        - rssi_left
+#        - rssi_right
+#        - null
+
+#    pipeline.steps_config.0.FeatureTransformer.params.with_mean:
+#      type: categorical
+#      choices:
+#        - null
+#        - mean
+#        - median
+#
+#    pipeline.steps_config.0.FeatureTransformer.params.with_std:
+#      type: categorical
+#      choices:
+#        - True
+#        - False
+
+#  search_space:
+#    pipeline.final_estimator.1.LogisticRegression.alpha:
+#      type: float
+#      low: 0.001
+#      high: 5.0
+#      log: True
+

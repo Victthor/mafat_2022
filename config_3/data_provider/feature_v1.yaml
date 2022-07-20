@@ -1,0 +1,7 @@
+
+_target_: data_provider.feature_provider_v1.Provider
+params:
+  min_length: 360
+  offset: 360
+  shuffle: True
+  seed: 42

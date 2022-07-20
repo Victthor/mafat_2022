@@ -1,16 +1,16 @@
 
 defaults:
-  - pipeline: ensemble_v1  # pipeline_v1 / pipeline_feature_v1 / ensemble_v1
+  - pipeline: pipeline_v1  # pipeline_v1 / pipeline_feature_v1 / ensemble_v1
   - dataset: dataset
   - logger: mlflow_logger
   - data_provider: ts_v1  # feature_v1 / ts_v1
-  - hydra: optuna_hp_feat  # optuna_hp / optuna_hp_feat
+  - hydra: optuna_hp  # optuna_hp / optuna_hp_feat
   - _self_
 
 
 input_path: /home/victore/PycharmProjects/mafat_2022_data
 
-experiment_name: multi_check_v1_multi____
+experiment_name: multi_check_v1_multi_____
 
 #tracking_uri: file:///home/victore/PycharmProjects/mafat_mlflow
 tracking_uri: http://localhost/my_mlflow
